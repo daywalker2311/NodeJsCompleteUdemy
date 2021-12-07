@@ -2,7 +2,7 @@ const path = require('path');
 
 const express = require('express');
 
-const ProductController = require('../controllers/products');
+const AdminController = require('../controllers/admin');
 
 
 //using router method provided by express lib, to be used as a pluggable 
@@ -12,10 +12,13 @@ const router = express.Router();
 
 //middleware function implemented use app.use
 //  /admin/add-product => GET 
-router.get('/add-product', ProductController.getAddProduct);
+router.get('/add-product', AdminController.getAddProduct);
+
+//  /admin/products => GET 
+router.get('/products', AdminController.getProducts);
 
 //  /admin/add-product => POST
-router.post('/add-product', ProductController.postAddProduct);
+router.post('/add-product', AdminController.postAddProduct);
 
 //exports.router = router;
 //exports.products = products;
