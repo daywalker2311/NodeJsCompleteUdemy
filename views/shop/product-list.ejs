@@ -15,11 +15,14 @@
                                     </h1>
                                 </header>
                                 <div class="card__image">
-                                    <img src="" alt="book img here">
+                                    <img src="<%= product.imageUrl%>" alt="<%= product.title%>">
                                 </div>
                                 <div class="card__content">
-                                    <h2>$222.333</h2>
-                                    <p>idk , read and lemme know how it is</p>
+                                    <h2>$<%= product.price%>
+                                    </h2>
+                                    <p>
+                                        <%= product.description%>
+                                    </p>
                                 </div>
                                 <div class="card__actions">
                                     <button class="btn">Add to Cart</button>
