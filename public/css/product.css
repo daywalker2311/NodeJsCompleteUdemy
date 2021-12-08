@@ -29,7 +29,7 @@
     outline-color: #00695c;
 }
 
-button, .btn {
+button {
     font: inherit;
     background: white;
     border-radius: 3px;
