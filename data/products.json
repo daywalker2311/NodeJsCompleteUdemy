@@ -1,16 +1,16 @@
 [
     {
-        "id": "33333",
-        "title": "New Author",
-        "description": "its supposed to be an awesome book but idk",
-        "imageUrl": "book url",
-        "price": "20"
-    },
-    {
         "id": "1111",
         "title": "EEEEE",
         "description": "idk yet",
         "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa0x14mZMnvU46Xfh8S7dL3LQPQZOAJePzsg&usqp=CAU",
         "price": "22"
+    },
+    {
+        "title": "third one",
+        "description": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa0x14mZMnvU46Xfh8S7dL3LQPQZOAJePzsg&usqp=CAUhttps://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa0x14mZMnvU46Xfh8S7dL3LQPQZOAJePzsg&usqp=CAU",
+        "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa0x14mZMnvU46Xfh8S7dL3LQPQZOAJePzsg&usqp=CAU",
+        "price": "300",
+        "id": "0.25379102226684935"
     }
 ]
