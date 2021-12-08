@@ -9,6 +9,12 @@ router.get('/', ShopController.getIndex);
 
 router.get('/products', ShopController.getProducts);
 
+// here : is letting express know that there will be a variable value in route
+//put any specific routes before the below route 
+//for example: '/products/delete', otherwise in this case 'delete' will be treated as a variable value
+//and will never be fired if its put after the below line.
+router.get('/products/:productId', ShopController.getProduct);
+
 router.get('/cart', ShopController.getCart);
 
 router.get('/checkout', ShopController.getCheckout);
