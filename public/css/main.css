@@ -102,3 +102,7 @@ main {
     background-color: #00695c;
     color: white;
   }
+
+  .centered{
+    text-align: center;
+  }
