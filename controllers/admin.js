@@ -19,7 +19,7 @@ exports.postAddProduct = (req, res, next) => {
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    const product = new Product(title, imageUrl, price, description);
+    const product = new Product(null, title, imageUrl, price, description);
     product.save();
 
     res.redirect('/');
@@ -49,6 +49,21 @@ exports.getEditProduct = (req, res, next) => {
 
     //next();//this allows the request to continue to the next middleware
 }
+
+exports.postEditProduct = (req, res, next) => {
+    const prodId = req.body.productId;
+    const updatedTitle = req.body.title;
+    const updatedPrice = req.body.price;
+    const updatedImageUrl = req.body.imageUrl;
+    const updatedDescription = req.body.description;
+
+    const updatedProduct = new Product(prodId, updatedTitle, updatedImageUrl, updatedPrice, updatedDescription);
+
+    updatedProduct.save();
+
+    res.redirect('/admin/products');
+}
+
 
 exports.getProducts = (req, res, next) => {
     Product.fetchAll((products) => {
