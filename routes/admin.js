@@ -20,6 +20,8 @@ router.get('/products', AdminController.getProducts);
 //  /admin/add-product => POST
 router.post('/add-product', AdminController.postAddProduct);
 
+router.get('/edit-product/:productId', AdminController.getEditProduct);
+
 //exports.router = router;
 //exports.products = products;
 module.exports = router;
