@@ -3,16 +3,17 @@ const Product = require('../models/product');
 const Cart = require('../models/cart');
 
 exports.getProducts = (req, res, next) => {
-    //console.log("in another middleware");
-    //console.log("shop.js", adminData.products);
-    //res.sendFile(path.join(rootDir, 'views', 'shop.html'))
-    Product.fetchAll((products) => {
-        res.render('shop/product-list', {
-            prods: products,
-            pageTitle: 'All Products',
-            path: '/products',
+    Product.fetchAll()
+        .then(([rows, fieldData]) => {
+            res.render('shop/product-list', {
+                prods: rows,
+                pageTitle: 'All Products',
+                path: '/products',
+            });
+        })
+        .catch(err => {
+            console.log(err)
         });
-    });
 }
 
 exports.getProduct = (req, res, next) => {
@@ -33,13 +34,19 @@ exports.getProduct = (req, res, next) => {
 
 
 exports.getIndex = (req, res, next) => {
-    Product.fetchAll((products) => {
-        res.render('shop/index', {
-            prods: products,
-            pageTitle: 'Index Page',
-            path: '/',
+    Product.fetchAll()
+        .then(([rows, fieldData]) => {
+            res.render('shop/index', {
+                prods: rows,
+                pageTitle: 'Index Page',
+                path: '/',
+            });
+        })
+        .catch(err => {
+            console.log(err)
         });
-    });
+
+
 }
 
 exports.getCart = (req, res, next) => {
