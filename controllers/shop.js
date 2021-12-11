@@ -19,15 +19,13 @@ exports.getProducts = (req, res, next) => {
 exports.getProduct = (req, res, next) => {
     //fetching the productId from params of the req
     const prodId = req.params.productId;
-    Product.findById(prodId, product => {
-        console.log("product here ", product);
-
+    Product.findById(prodId).then(([product]) => {
         res.render('shop/product-detail', {
             path: '/products',
             pageTitle: product.title,
-            product: product
+            product: product[0]
         })
-    })
+    }).catch(err => { console.log(err) });
     //console.log("id here : ", prodId);
     //res.redirect('/');
 }
