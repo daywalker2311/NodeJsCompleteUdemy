@@ -2,6 +2,7 @@ const path = require('path');
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoConnect = require('./util/database');
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -20,5 +21,9 @@ app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(ErrorController.get404Page);
 
-app.listen(3000)
+mongoConnect(client => {
+    console.log(client);
+    app.listen(3000)
+});
+
 
