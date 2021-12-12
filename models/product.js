@@ -12,7 +12,8 @@ module.exports = class Product {
     save() {
         const db = getDb();
         //db.collection('products').insertOne({name:'Jitsu', price:1133.33});
-        db.collection('products').insertOne(this)
+        return db.collection('products')
+            .insertOne(this)
             .then((result) => {
                 console.log("save obj result : ", result);
             })
