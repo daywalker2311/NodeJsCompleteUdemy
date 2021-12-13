@@ -41,7 +41,7 @@ exports.getEditProduct = (req, res, next) => {
         return res.redirect('/');
     }
     const prodId = req.params.productId;
-    Product.findById(prodId, product => {
+    Product.findById(prodId).then(product => {
         if (!product) {
             return res.redirect('/');
         }
@@ -53,6 +53,7 @@ exports.getEditProduct = (req, res, next) => {
         });
 
     })
+        .catch((err) => { console.log("getEditProduct() err : ", err) })
 
     //next();//this allows the request to continue to the next middleware
 }
@@ -64,16 +65,21 @@ exports.postEditProduct = (req, res, next) => {
     const updatedImageUrl = req.body.imageUrl;
     const updatedDescription = req.body.description;
 
-    const updatedProduct = new Product(prodId, updatedTitle, updatedImageUrl, updatedPrice, updatedDescription);
+    const updatedProduct = new Product(updatedTitle, updatedImageUrl, updatedPrice, updatedDescription, prodId);
 
-    updatedProduct.save();
-
-    res.redirect('/admin/products');
+    updatedProduct.save()
+        .then(result => {
+            console.log("product updated");
+            res.redirect('/admin/products');
+        })
+        .catch(err => {
+            console.log("postEditProduct err : ", err);
+        })
 }
 
 
 exports.getProducts = (req, res, next) => {
-    Product.fetchAll((products) => {
+    Product.fetchAll().then((products) => {
         res.render('admin/products', {
             prods: products,
             pageTitle: 'Admin Products',

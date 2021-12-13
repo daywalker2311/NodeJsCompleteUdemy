@@ -18,17 +18,18 @@ exports.getProducts = (req, res, next) => {
 exports.getProduct = (req, res, next) => {
     //fetching the productId from params of the req
     const prodId = req.params.productId;
-    Product.findById(prodId, product => {
-        console.log("product here ", product);
 
-        res.render('shop/product-detail', {
-            path: '/products',
-            pageTitle: product.title,
-            product: product
+    Product.findById(prodId)
+        .then(product => {
+            res.render('shop/product-detail', {
+                path: '/products',
+                pageTitle: product.title,
+                product: product
+            })
         })
-    })
-    //console.log("id here : ", prodId);
-    //res.redirect('/');
+        .catch(err => {
+            console.log("getProduct err : ", err);
+        })
 }
 
 
