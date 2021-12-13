@@ -9,7 +9,7 @@ module.exports = class Product {
         this.description = description;
         this.imageUrl = imageUrl;
         this.price = price;
-        this._id = new mongoDb.ObjectId(id);
+        this._id = id ? new mongoDb.ObjectId(id) : null;
     }
 
     save() {
