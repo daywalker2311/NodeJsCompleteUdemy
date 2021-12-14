@@ -15,7 +15,7 @@ router.get('/products', ShopController.getProducts);
 //and will never be fired if its put after the below line.
 router.get('/products/:productId', ShopController.getProduct);
 
-router.get('/cart', ShopController.getCart);
+// router.get('/cart', ShopController.getCart);
 
 router.post('/cart', ShopController.postCart);
 
@@ -23,6 +23,6 @@ router.get('/checkout', ShopController.getCheckout);
 
 router.get('/orders', ShopController.getOrders);
 
-router.post('/cart-delete-item', ShopController.postCartDeleteProduct);
+//router.post('/cart-delete-item', ShopController.postCartDeleteProduct);
 
 module.exports = router;
