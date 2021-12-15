@@ -74,6 +74,22 @@ module.exports = class User {
             .catch(err => { console.log('User getCart() err', err) });
     }
 
+    deleteItemFromCart(id) {
+        const updatedCartItems = this.cart.items.filter(prod => {
+            return prod.productId.toString() !== id.toString()
+        })
+
+        console.log("udpatedCartItems : ", updatedCartItems);
+
+        const db = getDb();
+        return db
+            .collection('users')
+            .updateOne(
+                { _id: new ObjectId(this._id) },
+                { $set: { cart: { items: updatedCartItems } } });
+
+    }
+
     static findById(id) {
         const db = getDb();
 
