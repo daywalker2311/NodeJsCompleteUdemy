@@ -70,15 +70,14 @@ exports.postCart = (req, res, next) => {
     const prodId = req.body.productId;
     console.log(prodId);
 
-
     Product.findById(prodId)
         .then((product) => {
             return req.user.addToCart(product);
         })
         .then(result => {
             console.log("postCart() result : ", result);
+            res.redirect('/cart');
         })
-    res.redirect('/cart');
 }
 
 exports.getCheckout = (req, res, next) => {
