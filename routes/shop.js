@@ -15,7 +15,7 @@ router.get('/products', ShopController.getProducts);
 //and will never be fired if its put after the below line.
 router.get('/products/:productId', ShopController.getProduct);
 
-// router.get('/cart', ShopController.getCart);
+router.get('/cart', ShopController.getCart);
 
 router.post('/cart', ShopController.postCart);
 

@@ -50,29 +50,21 @@ exports.getIndex = (req, res, next) => {
         });
 }
 
-// exports.getCart = (req, res, next) => {
-//     Cart.getCart(cart => {
-//         Product.fetchAll(products => {
-//             const cartProducts = [];
-
-//             for (const product of products) {
-//                 const cartProductData = cart.products.find(prod => prod.id === product.id);
-
-//                 if (cartProductData) {
-//                     cartProducts.push({ productData: product, qty: cartProductData.qty });
-//                 }
-
-//             }
-//             console.log(cartProducts);
-//             res.render('shop/cart', {
-//                 path: '/cart',
-//                 pageTitle: 'Your Cart',
-//                 products: cartProducts
-//             });
-//         })
-//     })
-
-// }
+exports.getCart = (req, res, next) => {
+    req.user
+        .getCart()
+        .then(products => {
+            console.log("insides of cart : ", products);
+            res.render('shop/cart', {
+                path: '/cart',
+                pageTitle: 'Your Cart',
+                products: products
+            });
+        })
+        .catch(err => {
+            console.log("getCart() err : ", err);
+        });
+}
 
 exports.postCart = (req, res, next) => {
     const prodId = req.body.productId;
