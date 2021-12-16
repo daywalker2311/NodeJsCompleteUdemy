@@ -5,9 +5,9 @@ const router = express.Router();
 
 const ShopController = require('../controllers/shop');
 
-// router.get('/', ShopController.getIndex);
+router.get('/', ShopController.getIndex);
 
-// router.get('/products', ShopController.getProducts);
+router.get('/products', ShopController.getProducts);
 
 // // here : is letting express know that there will be a variable value in route
 // //put any specific routes before the below route 

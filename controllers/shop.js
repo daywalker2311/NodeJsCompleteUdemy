@@ -4,7 +4,8 @@ const User = require('../models/user');
 
 
 exports.getProducts = (req, res, next) => {
-    Product.fetchAll().then((products) => {
+    //find() provided by Mongoose fetches all products, if the list is huge, cursor should be used 
+    Product.find().then((products) => {
         res.render('shop/product-list', {
             prods: products,
             pageTitle: 'All Products',
@@ -36,7 +37,7 @@ exports.getProduct = (req, res, next) => {
 
 exports.getIndex = (req, res, next) => {
     console.log("getIndex() called");
-    Product.fetchAll().then((products) => {
+    Product.find().then((products) => {
         //console.log("getIndex() products: ", products);
 
         res.render('shop/index', {
