@@ -88,10 +88,19 @@ exports.getCheckout = (req, res, next) => {
 }
 
 exports.getOrders = (req, res, next) => {
-    res.render('shop/orders', {
-        path: '/orders',
-        pageTitle: 'Your Orders'
-    });
+    req.user
+        .getOrders()
+        .then(orders => {
+            console.log("orderData getOrdes : ", orders);
+
+            res.render('shop/orders', {
+                path: '/orders',
+                pageTitle: 'Your Orders',
+                orders: orders
+            });
+        })
+        .catch(err => console.log("getOrders Controller error ", err));
+
 }
 
 exports.postOrder = (req, res, next) => {

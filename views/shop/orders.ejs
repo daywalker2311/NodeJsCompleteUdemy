@@ -3,4 +3,30 @@
 
     <body>
         <%- include('../includes/navigation.ejs') %>
+
+            <main>
+                <% if( orders.length <=0) { %>
+                    <h2>No orders yet</h2>
+                    <% } else { %>
+                        <ul class="orders">
+                            <% orders.forEach(order=> { %>
+                                <li>
+                                    <h2>Order #<%= order._id %>
+                                    </h2>
+                                    <ul>
+                                        <% order.items.forEach(product=> { %>
+                                            <li>
+                                                <%= product.title %> ( <%= product.quantity %> )
+                                            </li>
+                                            <% }) %>
+                                    </ul>
+                                </li>
+
+
+                                <%}); %>
+                        </ul>
+
+
+                        <% } %>
+            </main>
             <%- include('../includes/end.ejs') %>
