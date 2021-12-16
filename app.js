@@ -2,7 +2,9 @@ const path = require('path');
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const mongoConnect = require('./util/database').mongoConnect;
+
+//added mongoose for handling data and DB, its an (O)bject (D)ocument (M)apper like ORM
+const mongoose = require('mongoose');
 
 const User = require('./models/user');
 
@@ -35,8 +37,9 @@ app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(ErrorController.get404Page);
 
-mongoConnect(() => {
-    app.listen(3000)
-});
-
+mongoose.connect('mongodb+srv://mern123:mern123@devconnector.ux9ev.mongodb.net/shop?retryWrites=true&w=majority')
+    .then(result => {
+        app.listen(3000);
+    })
+    .catch(err => console.log("mongoose.connect err", err));
 
