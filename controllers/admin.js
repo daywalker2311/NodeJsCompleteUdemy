@@ -25,6 +25,7 @@ exports.postAddProduct = (req, res, next) => {
         price: price,
         description: description,
         imageUrl: imageUrl,
+        userId: req.user
     })
 
     //save() provided by Mongoose this time !!! and we can just use it on Product object
