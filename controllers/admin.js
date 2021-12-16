@@ -96,13 +96,22 @@ exports.postEditProduct = (req, res, next) => {
 
 
 exports.getProducts = (req, res, next) => {
-    Product.find().then((products) => {
-        res.render('admin/products', {
-            prods: products,
-            pageTitle: 'Admin Products',
-            path: '/admin/products',
+    Product
+        .find()
+        //more helper functions 
+        //select particular data from the resultset
+        //.select('title price -_id')
+        //populates the data within the resultset based of their Ids
+        //.populate('userId')
+        .then((products) => {
+            console.log("products are here : ", products);
+
+            res.render('admin/products', {
+                prods: products,
+                pageTitle: 'Admin Products',
+                path: '/admin/products',
+            });
         });
-    });
 }
 
 exports.postDeleteProduct = (req, res, next) => {
