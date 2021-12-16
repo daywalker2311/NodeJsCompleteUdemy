@@ -12,13 +12,13 @@ const router = express.Router();
 
 //middleware function implemented use app.use
 //  /admin/add-product => GET 
-// router.get('/add-product', AdminController.getAddProduct);
+router.get('/add-product', AdminController.getAddProduct);
 
 // //  /admin/products => GET 
 // router.get('/products', AdminController.getProducts);
 
 // //  /admin/add-product => POST
-// router.post('/add-product', AdminController.postAddProduct);
+router.post('/add-product', AdminController.postAddProduct);
 
 // router.get('/edit-product/:productId', AdminController.getEditProduct);
 
