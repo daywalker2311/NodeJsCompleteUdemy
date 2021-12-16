@@ -21,6 +21,7 @@ exports.getProduct = (req, res, next) => {
     //fetching the productId from params of the req
     const prodId = req.params.productId;
 
+    //again findById() provided by Mongoose
     Product.findById(prodId)
         .then(product => {
             res.render('shop/product-detail', {
