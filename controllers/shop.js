@@ -111,7 +111,8 @@ exports.postOrder = (req, res, next) => {
         .then(result => {
             const products = result.cart.items.map(item => {
                 return {
-                    product: item.productId,
+                    //using spread operator and mongoose provided _doc field we can pull the whole document
+                    product: { ...item.productId._doc },
                     quantity: item.quantity
                 }
             });
