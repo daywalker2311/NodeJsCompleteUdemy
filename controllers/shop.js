@@ -90,8 +90,8 @@ exports.getCheckout = (req, res, next) => {
 }
 
 exports.getOrders = (req, res, next) => {
-    req.user
-        .getOrders()
+
+    Order.find({ 'user.userId': req.user._id })
         .then(orders => {
             console.log("orderData getOrdes : ", orders);
 
@@ -102,7 +102,6 @@ exports.getOrders = (req, res, next) => {
             });
         })
         .catch(err => console.log("getOrders Controller error ", err));
-
 }
 
 exports.postOrder = (req, res, next) => {
