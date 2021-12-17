@@ -1,7 +1,7 @@
 //const products = [];
 const Product = require('../models/product');
 const User = require('../models/user');
-
+const Order = require('../models/order');
 
 exports.getProducts = (req, res, next) => {
     //find() provided by Mongoose fetches all products, if the list is huge, cursor should be used 
@@ -106,7 +106,27 @@ exports.getOrders = (req, res, next) => {
 }
 
 exports.postOrder = (req, res, next) => {
-    req.user.addOrder()
+    req.user
+        .populate('cart.items.productId')
+        .then(result => {
+            const products = result.cart.items.map(item => {
+                return {
+                    product: item.productId,
+                    quantity: item.quantity
+                }
+            });
+            console.log("postOrder result : ", products);
+
+            const order = new Order({
+                user: {
+                    name: req.user.name,
+                    userId: req.user
+                },
+                products: products
+            })
+
+            return order.save();
+        })
         .then(result => {
             res.redirect('/orders');
         })
