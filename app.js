@@ -2,6 +2,8 @@ const path = require('path');
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+
 
 //added mongoose for handling data and DB, its an (O)bject (D)ocument (M)apper like ORM
 const mongoose = require('mongoose');
@@ -21,6 +23,10 @@ const ErrorController = require('./controllers/error');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+//implementing session in order to validate user in backend instead of using cookies in browser
+app.use(session({ secret: 'my long secret key', resave: false, saveUninitialized: false }));
+
 
 app.use((req, res, next) => {
     User.findById('61bb9b2101a9e209635c1ae9')
