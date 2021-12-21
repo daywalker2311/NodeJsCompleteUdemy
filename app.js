@@ -57,22 +57,6 @@ app.use(ErrorController.get404Page);
 
 mongoose.connect(MONGODB_URI)
     .then(result => {
-        //findOne() returns the first user in the DB
-        User.findOne().then(user => {
-            //if user is undefined then create new user
-            if (!user) {
-                const user = new User(
-                    {
-                        name: 'Dewalker',
-                        email: 'dewalker.test@gmail.com',
-                        cart: {
-                            items: []
-                        }
-                    });
-                user.save();
-            }
-        })
-
         app.listen(3000);
     })
     .catch(err => console.log("mongoose.connect err", err));
