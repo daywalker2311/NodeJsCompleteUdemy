@@ -7,7 +7,7 @@ exports.getLogin = (req, res, next) => {
     res.render('auth/login', {
         path: '/login',
         pageTitle: 'Login',
-        isLoggedIn: false,
+        isLoggedIn: req.session.isLoggedIn,
     });
 };
 
@@ -16,7 +16,7 @@ exports.postLogin = (req, res, next) => {
     User.findById('61bb9b2101a9e209635c1ae9')
         .then(user => {
             req.session.isLoggedIn = true;
-            req.user = user;
+            req.session.user = user;
             res.redirect('/');
         })
         .catch(err => { console.log("postLogin error : ", err) });
