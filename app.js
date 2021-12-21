@@ -36,10 +36,13 @@ app.use(session({ secret: 'my long secret key', resave: false, saveUninitialized
 
 
 app.use((req, res, next) => {
-    User.findById('61bb9b2101a9e209635c1ae9')
+    if (!req.session.user) {
+        return next();
+    }
+    User.findById(req.session.user._id)
         .then(user => {
             req.user = user;
-            console.log("updated user data : ", req.user);
+            //console.log("updated user data : ", req.user);
             next();
         })
         .catch(err => {
