@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 const ShopController = require('../controllers/shop');
+const isAuth = require('../middleware/is-auth');
 
 router.get('/', ShopController.getIndex);
 
@@ -15,16 +16,16 @@ router.get('/products', ShopController.getProducts);
 // //and will never be fired if its put after the below line.
 router.get('/products/:productId', ShopController.getProduct);
 
-router.get('/cart', ShopController.getCart);
+router.get('/cart', isAuth, ShopController.getCart);
 
-router.post('/cart', ShopController.postCart);
+router.post('/cart', isAuth, ShopController.postCart);
 
 // router.get('/checkout', ShopController.getCheckout);
 
-router.post('/create-order', ShopController.postOrder);
+router.post('/create-order', isAuth, ShopController.postOrder);
 
-router.get('/orders', ShopController.getOrders);
+router.get('/orders', isAuth, ShopController.getOrders);
 
-router.post('/cart-delete-item', ShopController.postCartDeleteProduct);
+router.post('/cart-delete-item', isAuth, ShopController.postCartDeleteProduct);
 
 module.exports = router;
