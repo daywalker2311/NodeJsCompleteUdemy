@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoDbStore = require('connect-mongodb-session')(session);
+const csrf = require('csurf');
 
 const MONGODB_URI = 'mongodb+srv://mern123:mern123@devconnector.ux9ev.mongodb.net/shop?retryWrites=true&w=majority';
 
@@ -18,6 +19,8 @@ const store = new MongoDbStore({
     uri: MONGODB_URI,
     collection: 'sessions'
 })
+const csrfProtection = csrf();
+
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
@@ -54,6 +57,7 @@ app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 app.use(ErrorController.get404Page);
+app.use(csrfProtection);
 
 mongoose.connect(MONGODB_URI)
     .then(result => {
