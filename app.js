@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoDbStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
+const flash = require('connect-flash');
 
 const MONGODB_URI = 'mongodb+srv://mern123:mern123@devconnector.ux9ev.mongodb.net/shop?retryWrites=true&w=majority';
 
@@ -38,6 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({ secret: 'my long secret key', resave: false, saveUninitialized: false, store: store }));
 
 app.use(csrfProtection);
+app.use(flash());
 
 app.use((req, res, next) => {
     console.log("called")
