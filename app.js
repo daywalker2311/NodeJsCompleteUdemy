@@ -37,8 +37,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 //implementing session in order to validate user in backend instead of using cookies in browser
 app.use(session({ secret: 'my long secret key', resave: false, saveUninitialized: false, store: store }));
 
+app.use(csrfProtection);
 
 app.use((req, res, next) => {
+    console.log("called")
     if (!req.session.user) {
         return next();
     }
@@ -53,11 +55,20 @@ app.use((req, res, next) => {
         })
 })
 
+//adding values to be passed in all the rendered views via locals available to res obj
+app.use((req, res, next) => {
+    console.log("csrfToken: ", req.csrfToken());
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    res.locals.csrfToken = req.csrfToken();
+    next();
+})
+
+
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 app.use(ErrorController.get404Page);
-app.use(csrfProtection);
+
 
 mongoose.connect(MONGODB_URI)
     .then(result => {

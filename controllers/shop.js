@@ -10,7 +10,6 @@ exports.getProducts = (req, res, next) => {
             prods: products,
             pageTitle: 'All Products',
             path: '/products',
-            isLoggedIn: req.session.isLoggedIn,
         });
     })
         .catch(err => {
@@ -29,7 +28,6 @@ exports.getProduct = (req, res, next) => {
                 path: '/products',
                 pageTitle: product.title,
                 product: product,
-                isLoggedIn: req.session.isLoggedIn,
             })
         })
         .catch(err => {
@@ -47,8 +45,6 @@ exports.getIndex = (req, res, next) => {
             prods: products,
             pageTitle: 'Index Page',
             path: '/',
-            isLoggedIn: req.session.isLoggedIn,
-            csrfToken: req.csrfToken(),
         });
     })
         .catch(err => {
@@ -65,7 +61,6 @@ exports.getCart = (req, res, next) => {
                 path: '/cart',
                 pageTitle: 'Your Cart',
                 products: products,
-                isLoggedIn: req.session.isLoggedIn,
             });
         })
         .catch(err => {
@@ -91,7 +86,6 @@ exports.getCheckout = (req, res, next) => {
     res.render('shop/checkout', {
         path: '/checkout',
         pageTitle: 'Checkout',
-        isLoggedIn: req.session.isLoggedIn,
     })
 }
 
@@ -105,7 +99,6 @@ exports.getOrders = (req, res, next) => {
                 path: '/orders',
                 pageTitle: 'Your Orders',
                 orders: orders,
-                isLoggedIn: req.session.isLoggedIn,
             });
         })
         .catch(err => console.log("getOrders Controller error ", err));
@@ -126,7 +119,7 @@ exports.postOrder = (req, res, next) => {
 
             const order = new Order({
                 user: {
-                    name: req.user.name,
+                    email: req.user.email,
                     userId: req.user
                 },
                 products: products
