@@ -3,13 +3,18 @@ const bcrypt = require('bcryptjs');
 
 exports.getLogin = (req, res, next) => {
     //const isLoggedIn = req.get('Cookie').trim().split('=')[1];
-    console.log(req.session.isLoggedIn);
+    let message = req.flash('error')
+    if (message.length > 0) {
+        message = message[0];
+    }
+    else {
+        message = null;
+    }
 
     res.render('auth/login', {
         path: '/login',
         pageTitle: 'Login',
-        isLoggedIn: req.session.isLoggedIn,
-        errorMessage: req.flash('error')
+        errorMessage: message
     });
 };
 
