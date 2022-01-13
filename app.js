@@ -7,6 +7,23 @@ const MongoDbStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
 
+const multer = require('multer');
+const fileStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'images');
+    },
+    filename: (req, file, cb) => {
+        cb(null, new Date().toISOString().replace(/:/g, '-') + '-' + file.originalname);
+    }
+});
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+};
+
 const MONGODB_URI = 'mongodb+srv://mern123:mern123@devconnector.ux9ev.mongodb.net/shop?retryWrites=true&w=majority';
 
 //added mongoose for handling data and DB, its an (O)bject (D)ocument (M)apper like ORM
@@ -33,6 +50,10 @@ const authRoutes = require('./routes/auth');
 const ErrorController = require('./controllers/error');
 
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('image'));
+//app.use(multer({ dest: 'images' }).single('image'));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 //implementing session in order to validate user in backend instead of using cookies in browser
@@ -74,6 +95,7 @@ app.use(ErrorController.get404Page);
 
 mongoose.connect(MONGODB_URI)
     .then(result => {
+        console.log("listening now ...")
         app.listen(3000);
     })
     .catch(err => console.log("mongoose.connect err", err));
