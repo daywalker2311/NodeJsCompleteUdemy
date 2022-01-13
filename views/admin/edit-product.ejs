@@ -26,25 +26,27 @@
                             <textarea name="description" id="description" rows="5"><%= product.description %></textarea>
                         </div>
                         <input type="hidden" value="<%= product._id %>" name="productId">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <button class="btn" type="submit">
                             Update Product
                         </button>
 
                     </form>
                     <% } else { %>
-                        <form class="product-form" action="/admin/add-product" , method="POST">
+                        <form class="product-form" action="/admin/add-product" , method="POST"
+                            enctype="multipart/form-data">
                             <div class="form-control">
                                 <label for="title">Title</label>
                                 <input type="text" name="title" id="title">
                             </div>
-                        <!-- <div class="form-control">
+                            <!-- <div class="form-control">
                             <label for="imageUrl">Image URL</label>
                             <input type="text" name="imageUrl" id="imageUrl">
                         </div> -->
-                        <div class="form-control">
-                            <label for="image">Image</label>
-                            <input type="file" name="image" id="image" >
-                        </div>
+                            <div class="form-control">
+                                <label for="image">Image</label>
+                                <input type="file" name="image" id="image">
+                            </div>
                             <div class="form-control">
                                 <label for="price">Price</label>
                                 <input type="number" name="price" id="price" step="0.01">
@@ -54,6 +56,7 @@
                                 <textarea name="description" id="description" rows="5"></textarea>
                             </div>
 
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <button class="btn" type="submit">
                                 Add Product
                             </button>
