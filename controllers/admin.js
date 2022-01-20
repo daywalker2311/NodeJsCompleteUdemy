@@ -1,5 +1,7 @@
 const Product = require('../models/product');
 
+const fileHelper = require('../util/file');
+
 exports.getAddProduct = (req, res, next) => {
     console.log("in the add-product");
     //res.sendFile(path.join(rootDir, 'views', 'add-product.html'))
@@ -71,22 +73,28 @@ exports.postEditProduct = (req, res, next) => {
     const prodId = req.body.productId;
     const updatedTitle = req.body.title;
     const updatedPrice = req.body.price;
-    const updatedImageUrl = req.body.imageUrl;
+    const image = req.file;
     const updatedDescription = req.body.description;
 
     Product
         .findById(prodId)
         .then(product => {
+            if (product.userId.toString() !== req.user._id.toString()) {
+                return res.redirect('/');
+            }
             product.title = updatedTitle;
             product.price = updatedPrice;
             product.description = updatedDescription;
-            product.imageUrl = updatedImageUrl;
 
-            return product.save();
+            if (image) {
+                fileHelper.deleteFile(product.imageUrl);
+                product.imageUrl = image.path;
+            }
+            return product.save().then(result => {
+                console.log('product updated');
+                res.redirect('/admin/products');
+            });
 
-        }).then(result => {
-            console.log("product updated");
-            res.redirect('/admin/products');
         })
         .catch(err => {
             console.log("postEditProduct err : ", err);
@@ -115,11 +123,19 @@ exports.getProducts = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
     const prodId = req.body.productId;
-
-    Product
-        .findByIdAndRemove(prodId)
+    Product.findById(prodId)
+        .then(prod => {
+            if (!prod) {
+                return next(new Error('product not found'));
+            }
+            fileHelper.deleteFile(prod.imageUrl);
+            return Product.deleteOne({ _id: prodId, userId: req.user._id });
+        })
         .then(result => {
             res.redirect('/admin/products');
         })
         .catch(err => console.log("postDetelePRodcut err : ", err));
+
+
+
 }

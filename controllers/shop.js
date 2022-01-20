@@ -40,7 +40,6 @@ exports.getProduct = (req, res, next) => {
         })
 }
 
-
 exports.getIndex = (req, res, next) => {
     console.log("getIndex() called");
     Product.find().then((products) => {
@@ -193,7 +192,6 @@ exports.getInvoice = (req, res, next) => {
             pdfDoc.fontSize(20).text(`Order Total : $${totalPrice}`);
 
             pdfDoc.end();
-
         })
         .catch(err => console.log("getInvoice err : ", err));
 }
