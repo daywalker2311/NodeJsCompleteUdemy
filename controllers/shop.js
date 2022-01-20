@@ -3,6 +3,9 @@ const Product = require('../models/product');
 const User = require('../models/user');
 const Order = require('../models/order');
 
+const path = require('path');
+const fs = require('fs');
+
 exports.getProducts = (req, res, next) => {
     //find() provided by Mongoose fetches all products, if the list is huge, cursor should be used 
     Product.find().then((products) => {
@@ -146,4 +149,49 @@ exports.postCartDeleteProduct = (req, res, next) => {
         .catch(err => {
             console.log(err)
         })
+}
+
+exports.getInvoice = (req, res, next) => {
+    const orderId = req.params.orderId;
+
+    Order.findById(orderId)
+        .then(order => {
+            if (!order) {
+                return next(new Error('No orders found'));
+            }
+            if (order.user.userId.toString() === req.user._id.toString()) {
+                return next(new Error('Unauthorized'));
+            }
+            const invoiceName = 'invoice-' + orderId + '.pdf';
+            const invoicePath = path.join('data', 'invoices', invoiceName);
+
+            //1
+            //this way the file will be read/preload in Memory and then returned as a restponse
+            //this is an expensive way of handling file
+            //larger files will take forever to send response
+            //
+            // fs.readFile(invoicePath, (err, data) => {
+            //     if (err) {
+            //         return next(err);
+            //     }
+            //     res.setHeader('Content-Type', 'application/pdf');
+            //     res.setHeader('Content-Disposition', 'attachment; filename= "' + invoiceName + '"');
+            //     res.send(data);
+            // });
+
+            //2
+            //using Stream method for handling files
+            //creates a stream and downloads the file step by step as chunks
+            //browser concatenates the data chunks into one file
+            const file = fs.createReadStream(invoicePath);
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader(
+                'Content-Disposition',
+                'attachment; filename= "' + invoiceName + '"'
+            );
+
+            //response is a writable stream so we can pipe the result to response stream as below
+            file.pipe(res);
+        })
+        .catch(err => console.log("getInvoice err : ", err));
 }
