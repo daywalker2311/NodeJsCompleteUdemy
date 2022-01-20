@@ -8,7 +8,7 @@
                 <% if(prods.length> 0 ) { %>
                     <div class="grid">
                         <% for(let product of prods) { %>
-                            <article>
+                            <article class="card product-item">
                                 <header class="card__header">
                                     <h1>
                                         <%= product.title%>
@@ -31,6 +31,10 @@
                             </article>
                             <% } %>
                     </div>
+                    <section class="pagination">
+                        <a href="/?page=1">1</a>
+                        <a href="/?page=2">2</a>
+                    </section>
                     <% } else {%>
                         <h1>No products founddd</h1>
                         <% } %>
