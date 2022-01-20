@@ -5,6 +5,8 @@ const Order = require('../models/order');
 
 const path = require('path');
 const fs = require('fs');
+const PDFDocument = require('pdfkit');
+
 
 exports.getProducts = (req, res, next) => {
     //find() provided by Mongoose fetches all products, if the list is huge, cursor should be used 
@@ -159,12 +161,24 @@ exports.getInvoice = (req, res, next) => {
             if (!order) {
                 return next(new Error('No orders found'));
             }
-            if (order.user.userId.toString() === req.user._id.toString()) {
+            if (order.user.userId.toString() !== req.user._id.toString()) {
                 return next(new Error('Unauthorized'));
             }
             const invoiceName = 'invoice-' + orderId + '.pdf';
             const invoicePath = path.join('data', 'invoices', invoiceName);
 
+            const pdfDoc = new PDFDocument();
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader(
+                'Content-Disposition',
+                'inline; filename= "' + invoiceName + '"'
+            );
+            pdfDoc.pipe(fs.createWriteStream(invoicePath));
+            pdfDoc.pipe(res);
+
+            pdfDoc.text('yo waddup?');
+
+            pdfDoc.end();
             //1
             //this way the file will be read/preload in Memory and then returned as a restponse
             //this is an expensive way of handling file
@@ -183,15 +197,15 @@ exports.getInvoice = (req, res, next) => {
             //using Stream method for handling files
             //creates a stream and downloads the file step by step as chunks
             //browser concatenates the data chunks into one file
-            const file = fs.createReadStream(invoicePath);
-            res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader(
-                'Content-Disposition',
-                'attachment; filename= "' + invoiceName + '"'
-            );
+            // const file = fs.createReadStream(invoicePath);
 
-            //response is a writable stream so we can pipe the result to response stream as below
-            file.pipe(res);
+            // res.setHeader('Content-Type', 'application/pdf');
+            // res.setHeader(
+            //     'Content-Disposition',
+            //     'attachment; filename= "' + invoiceName + '"'
+            // );
+            // //response is a writable stream so we can pipe the result to response stream as below
+            // file.pipe(res);
         })
         .catch(err => console.log("getInvoice err : ", err));
 }
