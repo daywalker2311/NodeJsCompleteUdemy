@@ -1,12 +1,12 @@
 //const products = [];
 const Product = require('../models/product');
-const User = require('../models/user');
 const Order = require('../models/order');
 
 const path = require('path');
 const fs = require('fs');
 const PDFDocument = require('pdfkit');
 
+const ITEMS_PER_PAGE = 2;
 
 exports.getProducts = (req, res, next) => {
     //find() provided by Mongoose fetches all products, if the list is huge, cursor should be used 
@@ -41,16 +41,21 @@ exports.getProduct = (req, res, next) => {
 }
 
 exports.getIndex = (req, res, next) => {
-    console.log("getIndex() called");
-    Product.find().then((products) => {
-        //console.log("getIndex() products: ", products);
+    const page = req.query.page;
 
-        res.render('shop/index', {
-            prods: products,
-            pageTitle: 'Index Page',
-            path: '/',
-        });
-    })
+    console.log("getIndex() called");
+    Product.find()
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE)
+        .then((products) => {
+            //console.log("getIndex() products: ", products);
+
+            res.render('shop/index', {
+                prods: products,
+                pageTitle: 'Index Page',
+                path: '/',
+            });
+        })
         .catch(err => {
             console.log("getIndex err ,", err);
         });
