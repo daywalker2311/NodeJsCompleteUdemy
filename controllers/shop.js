@@ -176,36 +176,24 @@ exports.getInvoice = (req, res, next) => {
             pdfDoc.pipe(fs.createWriteStream(invoicePath));
             pdfDoc.pipe(res);
 
-            pdfDoc.text('yo waddup?');
+            pdfDoc.fontSize(24).text('Invoice', {
+                underline: true,
+                align: 'center'
+            });
+            pdfDoc.text('\n');
+            pdfDoc.fontSize(20).text('     Item      |      Qty     |   Price');
+            pdfDoc.text('\n');
+
+            let totalPrice = 0;
+            order.products.forEach(prod => {
+                totalPrice += prod.quantity * prod.product.price;
+                pdfDoc.fontSize(18).text(` ${prod.product.title} --  ${prod.quantity} x ${prod.product.price}`)
+            })
+            pdfDoc.text('\n');
+            pdfDoc.fontSize(20).text(`Order Total : $${totalPrice}`);
 
             pdfDoc.end();
-            //1
-            //this way the file will be read/preload in Memory and then returned as a restponse
-            //this is an expensive way of handling file
-            //larger files will take forever to send response
-            //
-            // fs.readFile(invoicePath, (err, data) => {
-            //     if (err) {
-            //         return next(err);
-            //     }
-            //     res.setHeader('Content-Type', 'application/pdf');
-            //     res.setHeader('Content-Disposition', 'attachment; filename= "' + invoiceName + '"');
-            //     res.send(data);
-            // });
 
-            //2
-            //using Stream method for handling files
-            //creates a stream and downloads the file step by step as chunks
-            //browser concatenates the data chunks into one file
-            // const file = fs.createReadStream(invoicePath);
-
-            // res.setHeader('Content-Type', 'application/pdf');
-            // res.setHeader(
-            //     'Content-Disposition',
-            //     'attachment; filename= "' + invoiceName + '"'
-            // );
-            // //response is a writable stream so we can pipe the result to response stream as below
-            // file.pipe(res);
         })
         .catch(err => console.log("getInvoice err : ", err));
 }
