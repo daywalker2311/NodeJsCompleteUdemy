@@ -55,6 +55,7 @@ app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
 //app.use(multer({ dest: 'images' }).single('image'));
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 //implementing session in order to validate user in backend instead of using cookies in browser
 app.use(session({ secret: 'my long secret key', resave: false, saveUninitialized: false, store: store }));
@@ -96,7 +97,7 @@ app.use(ErrorController.get404Page);
 mongoose.connect(MONGODB_URI)
     .then(result => {
         console.log("listening now ...")
-        app.listen(3000);
+        app.listen(5000);
     })
     .catch(err => console.log("mongoose.connect err", err));
 
