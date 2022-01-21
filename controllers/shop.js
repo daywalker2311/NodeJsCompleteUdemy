@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs');
 const PDFDocument = require('pdfkit');
 
-const ITEMS_PER_PAGE = 2;
+const ITEMS_PER_PAGE = 1;
 
 exports.getProducts = (req, res, next) => {
     //find() provided by Mongoose fetches all products, if the list is huge, cursor should be used 
@@ -41,21 +41,33 @@ exports.getProduct = (req, res, next) => {
 }
 
 exports.getIndex = (req, res, next) => {
-    const page = req.query.page;
+    let page = +req.query.page || 1;
+    console.log("page value : ", page);
 
+    let totalItems;
     console.log("getIndex() called");
-    Product.find()
-        .skip((page - 1) * ITEMS_PER_PAGE)
-        .limit(ITEMS_PER_PAGE)
-        .then((products) => {
-            //console.log("getIndex() products: ", products);
 
-            res.render('shop/index', {
-                prods: products,
-                pageTitle: 'Index Page',
-                path: '/',
-            });
-        })
+    Product.find().countDocuments().then(numProducts => {
+        totalItems = numProducts;
+
+        return Product.find()
+            .skip((page - 1) * ITEMS_PER_PAGE)
+            .limit(ITEMS_PER_PAGE);
+    }).then((products) => {
+        //console.log("getIndex() products: ", products);
+
+        res.render('shop/index', {
+            prods: products,
+            pageTitle: 'Index Page',
+            path: '/',
+            currentPage: page,
+            hasNextPage: page * ITEMS_PER_PAGE < totalItems,
+            hasPreviousPage: page > 1,
+            nextPage: page + 1,
+            previousPage: page - 1,
+            lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
+        });
+    })
         .catch(err => {
             console.log("getIndex err ,", err);
         });
