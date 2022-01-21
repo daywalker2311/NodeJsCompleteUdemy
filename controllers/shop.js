@@ -6,15 +6,35 @@ const path = require('path');
 const fs = require('fs');
 const PDFDocument = require('pdfkit');
 
-const ITEMS_PER_PAGE = 1;
+const ITEMS_PER_PAGE = 2;
 
 exports.getProducts = (req, res, next) => {
     //find() provided by Mongoose fetches all products, if the list is huge, cursor should be used 
-    Product.find().then((products) => {
+    let page = +req.query.page || 1;
+    console.log("page value : ", page);
+
+    let totalItems;
+    console.log("getIndex() called");
+
+    Product.find().countDocuments().then(numProducts => {
+        totalItems = numProducts;
+
+        return Product.find()
+            .skip((page - 1) * ITEMS_PER_PAGE)
+            .limit(ITEMS_PER_PAGE);
+    }).then((products) => {
+        //console.log("getIndex() products: ", products);
+
         res.render('shop/product-list', {
             prods: products,
-            pageTitle: 'All Products',
+            pageTitle: 'Products Page',
             path: '/products',
+            currentPage: page,
+            hasNextPage: page * ITEMS_PER_PAGE < totalItems,
+            hasPreviousPage: page > 1,
+            nextPage: page + 1,
+            previousPage: page - 1,
+            lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
         });
     })
         .catch(err => {
