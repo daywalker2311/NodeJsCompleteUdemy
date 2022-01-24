@@ -20,9 +20,11 @@ router.get('/cart', isAuth, ShopController.getCart);
 
 router.post('/cart', isAuth, ShopController.postCart);
 
-// router.get('/checkout', ShopController.getCheckout);
+router.get('/checkout', isAuth, ShopController.getCheckout);
 
-router.post('/create-order', isAuth, ShopController.postOrder);
+router.get('/checkout/success', ShopController.getCheckoutSuccess);
+
+router.get('/checkout/cancel', ShopController.getCheckout);
 
 router.get('/orders', isAuth, ShopController.getOrders);
 
